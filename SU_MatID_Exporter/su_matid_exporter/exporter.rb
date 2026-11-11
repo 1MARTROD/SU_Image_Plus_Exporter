@@ -1,6 +1,6 @@
 # encoding: UTF-8
 # SU_MatID_Exporter - Orquestador principal de la exportación
-# Fase 2 – Núcleo funcional + Fase 3 – Interfaz y UX
+# Fase 2 – Núcleo funcional + Fase 3 – Interfaz y UX + Fase 5.9 Shadow Pass
 
 require 'sketchup.rb'
 require 'fileutils'
@@ -34,7 +34,7 @@ module SU_MatID_Exporter
       last_dir     = Sketchup.read_default('SU_MatID_Exporter', 'last_folder', nil)
 
       path = UI.savepanel(
-        'Exportar Viewport + Material ID',
+        'Exportar Viewport + MatID + Shadow',
         last_dir,
         default_name
       )
@@ -53,6 +53,7 @@ module SU_MatID_Exporter
 
       viewport_path = File.join(dir, "#{base_with_ts}_viewport.png")
       matid_path    = File.join(dir, "#{base_with_ts}_matid.png")
+      shadow_path   = File.join(dir, "#{base_with_ts}_shadow.png")
       json_path     = File.join(dir, "#{base_with_ts}_materials.json")
 
       begin
@@ -64,6 +65,9 @@ module SU_MatID_Exporter
 
         Sketchup.status_text = 'Exportando Material ID…'
         ViewportExporter.export_material_id(matid_path, color_map)
+
+        Sketchup.status_text = 'Exportando Shadow Pass…'
+        ViewportExporter.export_shadow_pass(shadow_path)
 
         if include_json
           Sketchup.status_text = 'Generando archivo JSON de mapeo…'
@@ -78,6 +82,7 @@ module SU_MatID_Exporter
         msg << "Archivos generados:\n"
         msg << "• #{File.basename(viewport_path)}\n"
         msg << "• #{File.basename(matid_path)}\n"
+        msg << "• #{File.basename(shadow_path)}\n"
         msg << "• #{File.basename(json_path)}\n" if include_json
         msg << "\nCarpeta:\n#{dir}"
         UI.messagebox(msg)
