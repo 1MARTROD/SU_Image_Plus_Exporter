@@ -186,6 +186,18 @@ Plugin para exportar:
 - [ ] **5.6** Integración con pipeline externo de render
 - [ ] **5.7** Mejorar mensajes de error (más simples y multi-idioma)
 - [ ] **5.8** Revisar y agregar licencia
+- [x] **5.9** Shadow Pass (imagen solo con sombras) – Opción A ✅ IMPLEMENTADA
+  - Estrategia: **White Model + DisplayShadows = true**
+  - Materiales opacos → blanco puro + alpha 1.0
+  - Materiales transparentes/translúcidos → blanco + **se preserva el alpha original** (vidrio transmite luz)
+  - `FaceColorMode = 0`
+  - Fondo blanco
+  - Apagar edges (`EdgeDisplayMode = 0`) y profiles (`DrawSilhouettes = false`)
+  - Usar la configuración actual de `ShadowInfo` del modelo (hora, soft shadows, etc.)
+  - Restauración completa en `ensure` + `abort_operation`
+  - Nombre de archivo: `nombre_base_YYYYMMDD_HHMM_shadow.png`
+  - **Siempre se genera** (sin opción en UI)
+  - Antialiasing: **activado**
 
 ---
 
@@ -218,3 +230,18 @@ Plugin para exportar:
 | observaciones           | Vacío por defecto                                     | —                                    |
 | Sin materiales          | Mostrar advertencia y cancelar                        | —                                    |
 | Mensajes                | Español + descriptivos                                | Se simplificarán y se internacionalizarán |
+| Diálogo                 | `UI.savepanel`                                        | —                                    |
+| Nombre base por defecto | `NombreDelArchivo-SU_MatID`                           | —                                    |
+| Checkbox mapeo          | Activado por defecto                                  | —                                    |
+| Última carpeta          | Se recuerda                                           | —                                    |
+| Abrir carpeta           | No (solo mensaje)                                     | —                                    |
+| Feedback durante export | Status bar                                            | —                                    |
+| Comentarios             | Nivel moderado + español                              | —                                    |
+| Licencia                | Ninguna por ahora                                     | A revisar luego                      |
+| Versión mínima          | SketchUp 2020                                         | —                                    |
+| Dependencias            | Ninguna                                               | —                                    |
+| Menú                    | Plugins → Material ID Exporter → Exportar Viewport + MatID | Solo menú, sin icono ni atajo   |
+| Shadow Pass             | White Model + DisplayShadows = true (Opción A)        | Fondo blanco, materiales blancos |
+| Nombre Shadow Pass      | `*_shadow.png`                                        | —                                |
+| Shadow Pass siempre     | Sí (sin checkbox)                                     | Edges/profiles apagados          |
+| Antialiasing Shadow     | Activado                                              | —                                |
